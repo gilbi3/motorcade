@@ -1,0 +1,63 @@
+
+@import url('https://fonts.googleapis.com/css?family=Orbitron');
+
+    [v-cloak] > * {display:none}
+
+    .accentColor {
+        color: green;
+    }
+
+    .format {
+        margin: auto;
+        margin-left: 10px;
+    }
+    .fonty {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 20px;
+        color: red;
+    }
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+    li {
+        margin: auto;
+        text-align: center;
+    }
+    body {
+        text-align: center;
+    }
+    table {
+        
+        margin: auto;
+    }
+    th {
+        text-align: center;
+    }
+    .searchDiv {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .searchDiv > input {
+        width: 30%;
+        margin : auto;
+        margin-bottom: 5px;
+    }
+    .searchDiv > select {
+        width: 30%;
+        margin: auto;
+    }
+    .navbar-brand > img {
+        display: inline;
+    }
+    #motorcade {
+        height: 1200px;
+        width: 80%;
+        margin: auto;
+    }
+    .clear-search-btn {
+        width: 30%;
+        background: #e5e5e5;
+        margin: auto;
+        border: 1px outset lightgray;
+    }
