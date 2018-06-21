@@ -28,9 +28,13 @@
             <input type="hidden" v-model="id">
             <input v-model.lazy.number="year" type="number" id="vehicleYear" class="form-control" main="1950" max="2200" placeholder="Year"
                 onfocus="if(!motorcade.editing){this.value=''}" required>
-            <input v-model.lazy.trim="make" type="text" id="vehicleMake" class="form-control" placeholder="Make" onfocus="if(!motorcade.editing){this.value=''}" required>
-            <input v-model.lazy.trim="model" type="text" id="vehicleModel" class="form-control" placeholder="Model" onfocus="if(!motorcade.editing){this.value=''}" required>
+            <input v-model.lazy.trim="make" type="text" id="vehicleMake" class="form-control" placeholder="Make" onfocus="if(!motorcade.editing){this.value=''}"
+                required>
+            <input v-model.lazy.trim="model" type="text" id="vehicleModel" class="form-control" placeholder="Model" onfocus="if(!motorcade.editing){this.value=''}"
+                required>
             <input v-model.lazy.trim="manufacturerCode" type="text" id="vehicleManufacturerCode" class="form-control" placeholder="Manufacturer Code"
+                onfocus="if(!motorcade.editing){this.value=''}" required>
+            <input v-model.lazy.trim="engineType" type="text" id="vehicleEngineType" class="form-control" placeholder="Engine Type"
                 onfocus="if(!motorcade.editing){this.value=''}" required>
             <select v-model.lazy.number="toolTypeId" class="form-control" id="vehicleToolType">
                 <option value="0" disabled>Choose ToolType</option>
@@ -86,6 +90,7 @@
                     <th>Make</th>
                     <th>Model</th>
                     <th>Manufacturer Code</th>
+                    <th>Engine</th>
                     <th>ToolType</th>
                     <th>J2534</th>
                     <th></th>
@@ -107,6 +112,9 @@
                         </td>
                         <td>
                             {{car.manufacturerCode}}
+                        </td>
+                        <td>
+                            {{car.engineType}}
                         </td>
                         <td>
                             {{car.toolType.name}}

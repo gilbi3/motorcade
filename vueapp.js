@@ -27,6 +27,7 @@ var motorcade = new Vue({
     year: "",
     toolTypeId: 0,
     manufacturerCode: "",
+    engineType: "",
     isJ2534Compatible: false,
 
     get vehicleMMY() {
@@ -54,7 +55,8 @@ var motorcade = new Vue({
             model: this.model,
             year: this.year,
             manufacturerCode: this.manufacturerCode,
-            description: this.make + " " + this.model + " description",
+            engineType: this.engineType,
+            description: this.make + " " + this.model + " " + this.engineType,
             toolTypeId: this.toolTypeId,
             isJ2534Compatible: this.isJ2534Compatible
           }
@@ -84,7 +86,8 @@ var motorcade = new Vue({
             model: this.model,
             year: this.year,
             manufacturerCode: this.manufacturerCode,
-            description: this.make + " " + this.model + " description",
+            engineType: this.engineType,
+            description: this.make + " " + this.model + " " + this.engineType,
             toolTypeId: this.toolTypeId,
             isJ2534Compatible: this.isJ2534Compatible
           }
