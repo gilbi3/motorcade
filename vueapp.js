@@ -16,7 +16,6 @@ var motorcade = new Vue({
     data: {
 
         appName: 'Motorcade',
-        isOnline: true,
         showContextMenu: false,
         carData: null,
         toolTypeData: null,
@@ -165,7 +164,7 @@ var motorcade = new Vue({
             this.year = "";
             this.editing = false;
             this.manufacturerCode = "";
-            this.toolTypeId = ""
+            this.toolTypeId = "0"
             this.isJ2534Compatible = false;
         },
 
@@ -175,22 +174,6 @@ var motorcade = new Vue({
             this.codeSearch = '';
             this.toolTypeSearch = '';
             this.yearSearch = '';
-        },
-
-        toggleOnline: function () {
-            this.isOnline ? this.isOnline = false : this.isOnline = true;
-        },
-
-        goOnline: function () {
-            console.log("Go Online!")
-            this.isOnline = true;
-
-        },
-
-        goOffline: function () {
-            console.log("Go Offline!")
-            this.isOnline = false;
-
         }
     },
 
