@@ -13,25 +13,23 @@
 
 <body>
 
-    <div id="motorcade" @keypress.del="clearForm" @click="closeContextMenu" @contextmenu.prevent="contextMenu" v-cloak >
+    <div id="motorcade" @keypress.del="clearForm" @click="closeContextMenu" @contextmenu.prevent="contextMenu" v-cloak>
 
-            <nav class="navbar navbar-light bg-light">
-                <a class="navbar-brand fonty" href="#">
-                    <img src="astechlogo.jpeg" width="100" height="50" class="d-inline-block align-top" alt="">
-                    {{appName}}
-                </a>
-            </nav>
-       
+        <nav class="navbar navbar-light bg-light">
+            <a class="navbar-brand fonty" href="#">
+                <img src="astechlogo.jpeg" width="100" height="50" class="d-inline-block align-top" alt=""> {{appName}}
+            </a>
+        </nav>
+
         <!-- <h2 v-text="appStatus" v-bind:style="{color:isOnline? 'green' : 'red' }"></h2>
         <div class="btn btn-primary" v-on:click="toggleOnline">Toggle Status</div> -->
         <h3 v-if="!editing">Make an Entry</h3>
         <h1 v-text="vehicleMMY"></h1>
 
         <form style="width: 50%; margin: auto;" v-if="isOnline">
-            
             <input type="hidden" v-model="id">
-            <input v-model.lazy.number="year" type="number" id="vehicleYear" class="form-control" main="1950" max="2200" placeholder="Year" onfocus="if(!motorcade.editing){this.value=''}"
-                v-bind:disabled="!isOnline" required>
+            <input v-model.lazy.number="year" type="number" id="vehicleYear" class="form-control" main="1950" max="2200" placeholder="Year"
+                onfocus="if(!motorcade.editing){this.value=''}" v-bind:disabled="!isOnline" required>
             <input v-model.lazy.trim="make" type="text" id="vehicleMake" class="form-control" placeholder="Make" onfocus="if(!motorcade.editing){this.value=''}"
                 v-bind:disabled="!isOnline" required>
             <input v-model.lazy.trim="model" type="text" id="vehicleModel" class="form-control" placeholder="Model" onfocus="if(!motorcade.editing){this.value=''}"
@@ -48,9 +46,15 @@
             <hr>
 
             <div class="btn btn-primary" v-on:click="clearForm">Cancel</div>
-            <div @click.stop="submitForm(motorcade, $event)" v-bind:disabled="!isOnline" class="btn btn-success" v-if="!editing">Submit <span class="glyphicon glyphicon-floppy-disk"></span></div>
-            <div @click.stop="submitDeleteForm()" class="btn btn-danger" v-if="editing">Delete <span class="glyphicon glyphicon-remove"></span></div>
-            <div @click.stop="submitEditForm()" class="btn btn-success" v-if="editing">Submit Changes <span class="glyphicon glyphicon-floppy-disk"></span></div>
+            <div @click.stop="submitForm(motorcade, $event)" v-bind:disabled="!isOnline" class="btn btn-success" v-if="!editing">Submit
+                <span class="glyphicon glyphicon-floppy-disk"></span>
+            </div>
+            <div @click.stop="submitDeleteForm()" class="btn btn-danger" v-if="editing">Delete
+                <span class="glyphicon glyphicon-remove"></span>
+            </div>
+            <div @click.stop="submitEditForm()" class="btn btn-success" v-if="editing">Submit Changes
+                <span class="glyphicon glyphicon-floppy-disk"></span>
+            </div>
 
             <ul id="myContextMenu" v-if="showContextMenu" v-bind:style="{top:top, left:left, width: '150px', position: 'absolute', background: 'lightgray'}">
                 <li>
@@ -60,10 +64,7 @@
                     <a href=# @click="toggleOnline">Toggle Status</a>
                 </li>
             </ul>
-
         </form>
-
-
 
         <div v-else>
             <h2>Database disconnected.</h2>
@@ -82,7 +83,9 @@
                     <option value="" selected=>Tool Type</option>
                     <option v-for="type in toolTypeData" v-bind:value="type.id">{{type.name}}</option>
                 </select>
-                <div class="btn clear-search-btn" @click="clearSearch">Clear <span class="glyphicon glyphicon-trash"></span></div>
+                <div class="btn clear-search-btn" @click="clearSearch">Clear
+                    <span class="glyphicon glyphicon-trash"></span>
+                </div>
             </div>
             <table class="table">
                 <thead>
@@ -120,7 +123,9 @@
                             <span class="glyphicon glyphicon-remove" style="color:red;" v-else></span>
                         </td>
                         <td>
-                            <div class="btn btn-primary" @click="editEntry(car.id)"><span class="glyphicon glyphicon-pencil"></span></div>
+                            <div class="btn btn-primary" @click="editEntry(car.id)">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
@@ -128,7 +133,6 @@
         </div>
 
     </div>
-
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>

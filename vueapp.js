@@ -79,9 +79,8 @@ var motorcade = new Vue({
         },
 
         submitEditForm: function () {
-
+            
             if (this.make !== '' && this.model !== '' && typeof this.year === 'number' && this.manufacturerCode !== '') {
-
                 axios({
                     method: 'put',
                     url: 'http://localhost:65308/api/Motorcade/' + this.id,
@@ -139,14 +138,14 @@ var motorcade = new Vue({
             this.editing = true;
             this.id = id;
 
-            var obj = this.carData.find(function (obj) { return obj.id === id; });
+            var car = this.carData.find(function (obj) { return obj.id === id; });
 
-            this.make = obj.vehicleMMMY.make;
-            this.model = obj.vehicleMMMY.model;
-            this.year = obj.vehicleMMMY.year;
-            this.manufacturerCode = obj.manufacturerCode;
-            this.isJ2534Compatible = obj.isJ2534Compatible;
-            this.toolTypeId = obj.toolType.id;
+            this.make = car.vehicleMMMY.make;
+            this.model = car.vehicleMMMY.model;
+            this.year = car.vehicleMMMY.year;
+            this.manufacturerCode = car.manufacturerCode;
+            this.isJ2534Compatible = car.isJ2534Compatible;
+            this.toolTypeId = car.toolType.id;
 
         },
 
@@ -166,6 +165,7 @@ var motorcade = new Vue({
             this.year = "";
             this.editing = false;
             this.manufacturerCode = "";
+            this.toolTypeId = ""
             this.isJ2534Compatible = false;
         },
 
