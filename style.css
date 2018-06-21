@@ -13,7 +13,8 @@
     }
     .fonty {
         font-family: 'Orbitron', sans-serif;
-        font-size: 20px;
+        font-size: 25px;
+        font-weight: bolder;
         color: red;
     }
     ul {
@@ -60,4 +61,10 @@
         background: #e5e5e5;
         margin: auto;
         border: 1px outset lightgray;
+    }
+    form > input {
+        margin-bottom: 15px;
+    }
+    form > select {
+        margin-bottom: 15px;
     }

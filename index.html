@@ -21,32 +21,28 @@
             </a>
         </nav>
 
-        <!-- <h2 v-text="appStatus" v-bind:style="{color:isOnline? 'green' : 'red' }"></h2>
-        <div class="btn btn-primary" v-on:click="toggleOnline">Toggle Status</div> -->
         <h3 v-if="!editing">Make an Entry</h3>
         <h1 v-text="vehicleMMY"></h1>
 
-        <form style="width: 50%; margin: auto;" v-if="isOnline">
+        <form style="width: 50%; margin: auto;">
             <input type="hidden" v-model="id">
             <input v-model.lazy.number="year" type="number" id="vehicleYear" class="form-control" main="1950" max="2200" placeholder="Year"
-                onfocus="if(!motorcade.editing){this.value=''}" v-bind:disabled="!isOnline" required>
-            <input v-model.lazy.trim="make" type="text" id="vehicleMake" class="form-control" placeholder="Make" onfocus="if(!motorcade.editing){this.value=''}"
-                v-bind:disabled="!isOnline" required>
-            <input v-model.lazy.trim="model" type="text" id="vehicleModel" class="form-control" placeholder="Model" onfocus="if(!motorcade.editing){this.value=''}"
-                v-bind:disabled="!isOnline" required>
+                onfocus="if(!motorcade.editing){this.value=''}" required>
+            <input v-model.lazy.trim="make" type="text" id="vehicleMake" class="form-control" placeholder="Make" onfocus="if(!motorcade.editing){this.value=''}" required>
+            <input v-model.lazy.trim="model" type="text" id="vehicleModel" class="form-control" placeholder="Model" onfocus="if(!motorcade.editing){this.value=''}" required>
             <input v-model.lazy.trim="manufacturerCode" type="text" id="vehicleManufacturerCode" class="form-control" placeholder="Manufacturer Code"
-                onfocus="if(!motorcade.editing){this.value=''}" v-bind:disabled="!isOnline" required>
+                onfocus="if(!motorcade.editing){this.value=''}" required>
             <select v-model.lazy.number="toolTypeId" class="form-control" id="vehicleToolType">
                 <option value="0" disabled>Choose ToolType</option>
                 <option v-for="type in toolTypeData" v-bind:value="type.id">{{type.name}}</option>
             </select>
 
             <label for="vehicleJ2534">J2534?</label>
-            <input v-model.trim="isJ2534Compatible" type="checkbox" class="form-control" v-bind:disabled="!isOnline">
+            <input v-model.trim="isJ2534Compatible" type="checkbox" class="form-control">
             <hr>
 
             <div class="btn btn-primary" v-on:click="clearForm">Cancel</div>
-            <div @click.stop="submitForm(motorcade, $event)" v-bind:disabled="!isOnline" class="btn btn-success" v-if="!editing">Submit
+            <div @click.stop="submitForm(motorcade, $event)" class="btn btn-success" v-if="!editing">Submit
                 <span class="glyphicon glyphicon-floppy-disk"></span>
             </div>
             <div @click.stop="submitDeleteForm()" class="btn btn-danger" v-if="editing">Delete
@@ -59,9 +55,6 @@
             <ul id="myContextMenu" v-if="showContextMenu" v-bind:style="{top:top, left:left, width: '150px', position: 'absolute', background: 'lightgray'}">
                 <li>
                     <a href=# @click="clearForm">Clear Form</a>
-                </li>
-                <li>
-                    <a href=# @click="toggleOnline">Toggle Status</a>
                 </li>
             </ul>
         </form>
@@ -98,19 +91,19 @@
                     <th></th>
                 </thead>
                 <tbody>
-                    <tr v-for="car in carData" v-show="car.vehicleMMMY.model.toLowerCase().includes(modelSearch.toLowerCase()) 
-                                                     && car.vehicleMMMY.make.toLowerCase().includes(makeSearch.toLowerCase())
-                                                     && car.vehicleMMMY.year.toString().includes(yearSearch)
+                    <tr v-for="car in carData" v-show="car.vehicleMMY.model.toLowerCase().includes(modelSearch.toLowerCase()) 
+                                                     && car.vehicleMMY.make.toLowerCase().includes(makeSearch.toLowerCase())
+                                                     && car.vehicleMMY.year.toString().includes(yearSearch)
                                                      && car.toolType.id.toString().includes(toolTypeSearch)
                                                      && car.manufacturerCode.toString().includes(codeSearch)">
                         <td>
-                            {{car.vehicleMMMY.year}}
+                            {{car.vehicleMMY.year}}
                         </td>
                         <td>
-                            {{car.vehicleMMMY.make}}
+                            {{car.vehicleMMY.make}}
                         </td>
                         <td>
-                            {{car.vehicleMMMY.model}}
+                            {{car.vehicleMMY.model}}
                         </td>
                         <td>
                             {{car.manufacturerCode}}
