@@ -98,3 +98,15 @@ input {
 select {
   margin: 10px;
 }
+table > thead {
+  border-bottom: solid gray 3px;
+  border-top: solid gray 2px;
+}
+table > tbody > tr > td.table-cell {
+  border-bottom: solid gray 1px;
+  border-top: solid gray 1px;
+  padding-top: 15px;
+}
+table {
+  margin-top: 10px;
+}

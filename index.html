@@ -24,7 +24,7 @@
         <h3 v-if="!editing">Make an Entry</h3>
         <h1 v-text="vehicleMMY"></h1>
 
-        <form style="width: 50%; margin: auto;" class="form-inline">
+        <form style="width: 70%; margin: auto;" class="form-inline">
             <input type="hidden" v-model="id">
             <input v-model.lazy.number="year" type="number" id="vehicleYear" class="form-control mmy" main="1950" max="2200" placeholder="Year"
                 onfocus="if(!motorcade.editing){this.value=''}" required>
@@ -134,22 +134,22 @@
                                                      && car.vehicleAttr.vehicleMMY.year.toString().includes(year)
                                                      && car.vehicleAttr.engineType.toString().includes(engineType.toLowerCase())
                                                      && car.vehicleAttr.manufacturerCode.toString().includes(manufacturerCode.toLowerCase())">
-                        <td>
+                        <td class="table-cell">
                             {{car.vehicleAttr.vehicleMMY.year}}
-                        </td>
-                        <td>
+                        </td class="table-cell">
+                        <td class="table-cell">
                             {{car.vehicleAttr.vehicleMMY.make}}
                         </td>
-                        <td>
+                        <td class="table-cell">
                             {{car.vehicleAttr.vehicleMMY.model}}
                         </td>
-                        <td>
+                        <td class="table-cell">
                             {{car.vehicleAttr.engineType}}
                         </td>
-                        <td>
+                        <td class="table-cell">
                             {{car.vehicleAttr.toolType.name}}
                         </td>
-                        <td>
+                        <td class="table-cell">
                             <span v-bind:class="{'full' : car.collisionCoverage.coverageType.status===1,
                            'partial' : car.collisionCoverage.coverageType.status===2,
                            'noCoverage' : car.collisionCoverage.coverageType.status===3,
@@ -157,7 +157,7 @@
                                 Collision
                             </span>
                         </td>
-                        <td>
+                        <td class="table-cell">
                             <span v-bind:class="{'full' : car.mechanicalCoverage.coverageType.status===1,
                             'partial' : car.mechanicalCoverage.coverageType.status===2,
                             'noCoverage' : car.mechanicalCoverage.coverageType.status===3,
@@ -165,7 +165,7 @@
                                 Mechanical
                             </span>
                         </td>
-                        <td>
+                        <td class="table-cell">
                             <span v-bind:class="{'full' : car.calibrationCoverage.coverageType.status===1,
                             'partial' : car.calibrationCoverage.coverageType.status===2,
                             'noCoverage' : car.calibrationCoverage.coverageType.status===3,
@@ -173,11 +173,11 @@
                                 Calibration
                             </span>
                         </td>
-                        <td>
+                        <td class="table-cell">
                             <span class="glyphicon glyphicon-check" style="color:green;" v-if="car.vehicleAttr.isJ2534Compatible"></span>
                             <span class="glyphicon glyphicon-remove" style="color:red;" v-else></span>
                         </td>
-                        <td>
+                        <td class="table-cell">
                             <div class="btn btn-primary" @click="editEntry(car.vehicleAttr.id)">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </div>
