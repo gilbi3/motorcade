@@ -29,7 +29,7 @@ var motorcade = new Vue({
     isJ2534Compatible: false,
 
     get vehicleMMY() {
-      return this.year + " " + this.make + " " + this.model;
+      return this.year + " " + this.make + " " + this.model + " " + this.engineType;
     }
   },
 
@@ -165,9 +165,9 @@ var motorcade = new Vue({
       this.engineType = car.vehicleAttr.engineType;
       this.manufacturerCode = car.vehicleAttr.manufacturerCode;
       this.isJ2534Compatible = car.vehicleAttr.isJ2534Compatible;
-      this.collisionCoverage = car.collisionCoverage.coverageType.status;
-      this.mechanicalCoverage = car.mechanicalCoverage.coverageType.status;
-      this.calibrationCoverage = car.calibrationCoverage.coverageType.status;
+      this.collisionCoverage = car.collisionCoverage.status;
+      this.mechanicalCoverage = car.mechanicalCoverage.status;
+      this.calibrationCoverage = car.calibrationCoverage.status;
       this.toolTypeId = car.vehicleAttr.toolType.id;
     },
 

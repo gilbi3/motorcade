@@ -21,7 +21,8 @@
             </a>
         </nav>
 
-        <h3 v-if="!editing">Make an Entry</h3>
+        <h3 v-if="!editing">New Entry</h3>
+        <h3 v-else>Editing:</h3>
         <h1 v-text="vehicleMMY"></h1>
 
         <form style="width: 70%; margin: auto;" class="form-inline">
@@ -150,26 +151,26 @@
                             {{car.vehicleAttr.toolType.name}}
                         </td>
                         <td class="table-cell">
-                            <span v-bind:class="{'full' : car.collisionCoverage.coverageType.status===1,
-                           'partial' : car.collisionCoverage.coverageType.status===2,
-                           'noCoverage' : car.collisionCoverage.coverageType.status===3,
-                           'na' : car.collisionCoverage.coverageType.status===4}">
+                            <span v-bind:class="{'full' : car.collisionCoverage.status===1,
+                           'partial' : car.collisionCoverage.status===2,
+                           'noCoverage' : car.collisionCoverage.status===3,
+                           'na' : car.collisionCoverage.status===4}">
                                 Collision
                             </span>
                         </td>
                         <td class="table-cell">
-                            <span v-bind:class="{'full' : car.mechanicalCoverage.coverageType.status===1,
-                            'partial' : car.mechanicalCoverage.coverageType.status===2,
-                            'noCoverage' : car.mechanicalCoverage.coverageType.status===3,
-                            'na' : car.mechanicalCoverage.coverageType.status===4}">
+                            <span v-bind:class="{'full' : car.mechanicalCoverage.status===1,
+                            'partial' : car.mechanicalCoverage.status===2,
+                            'noCoverage' : car.mechanicalCoverage.status===3,
+                            'na' : car.mechanicalCoverage.status===4}">
                                 Mechanical
                             </span>
                         </td>
                         <td class="table-cell">
-                            <span v-bind:class="{'full' : car.calibrationCoverage.coverageType.status===1,
-                            'partial' : car.calibrationCoverage.coverageType.status===2,
-                            'noCoverage' : car.calibrationCoverage.coverageType.status===3,
-                            'na' : car.calibrationCoverage.coverageType.status===4}">
+                            <span v-bind:class="{'full' : car.calibrationCoverage.status===1,
+                            'partial' : car.calibrationCoverage.status===2,
+                            'noCoverage' : car.calibrationCoverage.status===3,
+                            'na' : car.calibrationCoverage.status===4}">
                                 Calibration
                             </span>
                         </td>
