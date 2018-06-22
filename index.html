@@ -24,25 +24,58 @@
         <h3 v-if="!editing">Make an Entry</h3>
         <h1 v-text="vehicleMMY"></h1>
 
-        <form style="width: 50%; margin: auto;">
+        <form style="width: 70%; margin: auto;" class="form-inline">
             <input type="hidden" v-model="id">
-            <input v-model.lazy.number="year" type="number" id="vehicleYear" class="form-control" main="1950" max="2200" placeholder="Year"
+            <input v-model.lazy.number="year, yearSearch" type="number" id="vehicleYear" class="form-control" main="1950" max="2200" placeholder="Year"
                 onfocus="if(!motorcade.editing){this.value=''}" required>
-            <input v-model.lazy.trim="make" type="text" id="vehicleMake" class="form-control" placeholder="Make" onfocus="if(!motorcade.editing){this.value=''}"
+            <input v-model.lazy.trim="make, makeSearch" type="text" id="vehicleMake" class="form-control" placeholder="Make" onfocus="if(!motorcade.editing){this.value=''}"
                 required>
-            <input v-model.lazy.trim="model" type="text" id="vehicleModel" class="form-control" placeholder="Model" onfocus="if(!motorcade.editing){this.value=''}"
+            <input v-model.lazy.trim="model, modelSearch" type="text" id="vehicleModel" class="form-control" placeholder="Model" onfocus="if(!motorcade.editing){this.value=''}"
                 required>
-            <input v-model.lazy.trim="manufacturerCode" type="text" id="vehicleManufacturerCode" class="form-control" placeholder="Manufacturer Code"
+            <input v-model.lazy.trim="manufacturerCode, codeSearch" type="text" id="vehicleManufacturerCode" class="form-control" placeholder="Manufacturer Code"
                 onfocus="if(!motorcade.editing){this.value=''}" required>
-            <input v-model.lazy.trim="engineType" type="text" id="vehicleEngineType" class="form-control" placeholder="Engine Type"
-                onfocus="if(!motorcade.editing){this.value=''}" required>
+            <input v-model.lazy.trim="engineType, engineSearch" type="text" id="vehicleEngineType" class="form-control" placeholder="Engine Type" onfocus="if(!motorcade.editing){this.value=''}"
+                required>
             <select v-model.lazy.number="toolTypeId" class="form-control" id="vehicleToolType">
                 <option value="0" disabled>Choose ToolType</option>
                 <option v-for="type in toolTypeData" v-bind:value="type.id">{{type.name}}</option>
             </select>
+            <div class="form-group" style="width: 100%;">
+                <label for="vehicleCollisionCoverage">Collision Coverage</label>
+                <select v-model.lazy.number="collisionCoverage" class="form-control" id="vehicleCollisionCoverage">
+                    <option value="0" disabled>Choose Status</option>
+                    <option value="1">Full</option>
+                    <option value="2">Partial</option>
+                    <option value="3">No Coverage</option>
+                    <option value="4">N/A</option>
+                </select>
+            </div>
+            <div class="form-group" style="width: 100%;">
+                <label for="mechanicalCoverage">Mechanical Coverage</label>
+                <select v-model.lazy.number="mechanicalCoverage" class="form-control" id="vehicleMechanicalCoverage">
+                    <option value="0" disabled>Choose Status</option>
+                    <option value="1">Full</option>
+                    <option value="2">Partial</option>
+                    <option value="3">No Coverage</option>
+                    <option value="4">N/A</option>
+                </select>
+            </div>
+            <div class="form-group" style="width: 100%;">
+                <label for="calibrationCoverage">Calibration Coverage</label>
+                <select v-model.lazy.number="calibrationCoverage" class="form-control" id="vehicleCalibrationCoverage">
+                    <option value="0" disabled>Choose Status</option>
+                    <option value="1">Full</option>
+                    <option value="2">Partial</option>
+                    <option value="3">No Coverage</option>
+                    <option value="4">N/A</option>
+                </select>
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="vehicleJ2534">J2534?</label>
+                <input v-model.trim="isJ2534Compatible" type="checkbox" class="form-control">
+            </div>
 
-            <label for="vehicleJ2534">J2534?</label>
-            <input v-model.trim="isJ2534Compatible" type="checkbox" class="form-control">
             <hr>
 
             <div class="btn btn-primary" v-on:click="clearForm">Cancel</div>
@@ -69,17 +102,15 @@
         <hr>
         <div>
             <h2>Database</h2>
-            <div class="searchDiv">
+            <div class="searchDiv" class="form-group">
                 <input class="form-control" type="number" v-model="yearSearch" placeholder="Search by Year">
                 <input class="form-control" type="text" v-model="makeSearch" placeholder="Search by Make">
                 <input class="form-control" type="text" v-model="modelSearch" placeholder="Search by Model">
                 <br>
                 <input class="form-control" type="text" v-model="codeSearch" placeholder="Search by Manufacturer Code">
                 <br>
-                <select class="form-control" v-model="toolTypeSearch" placeholder="Tool Type">
-                    <option value="" selected=>Tool Type</option>
-                    <option v-for="type in toolTypeData" v-bind:value="type.id">{{type.name}}</option>
-                </select>
+                <input class="form-control" type="text" v-model="engineSearch" placeholder="Search by Engine Type">
+
                 <div class="btn clear-search-btn" @click="clearSearch">Clear
                     <span class="glyphicon glyphicon-trash"></span>
                 </div>
@@ -89,42 +120,65 @@
                     <th>Year</th>
                     <th>Make</th>
                     <th>Model</th>
-                    <th>Manufacturer Code</th>
                     <th>Engine</th>
                     <th>ToolType</th>
+                    <th></th>
+                    <th>Coverages</th>
+                    <th></th>
                     <th>J2534</th>
                     <th></th>
                 </thead>
                 <tbody>
-                    <tr v-for="car in carData" v-show="car.vehicleMMY.model.toLowerCase().includes(modelSearch.toLowerCase()) 
-                                                     && car.vehicleMMY.make.toLowerCase().includes(makeSearch.toLowerCase())
-                                                     && car.vehicleMMY.year.toString().includes(yearSearch)
-                                                     && car.toolType.id.toString().includes(toolTypeSearch)
-                                                     && car.manufacturerCode.toString().includes(codeSearch)">
+                    <tr id="searchResults" v-for="car in carData" v-show="car.vehicleAttr.vehicleMMY.model.toLowerCase().includes(modelSearch.toLowerCase()) 
+                                                     && car.vehicleAttr.vehicleMMY.make.toLowerCase().includes(makeSearch.toLowerCase())
+                                                     && car.vehicleAttr.vehicleMMY.year.toString().includes(yearSearch)
+                                                     && car.vehicleAttr.engineType.toString().includes(engineSearch)
+                                                     && car.vehicleAttr.manufacturerCode.toString().includes(codeSearch)">
                         <td>
-                            {{car.vehicleMMY.year}}
+                            {{car.vehicleAttr.vehicleMMY.year}}
                         </td>
                         <td>
-                            {{car.vehicleMMY.make}}
+                            {{car.vehicleAttr.vehicleMMY.make}}
                         </td>
                         <td>
-                            {{car.vehicleMMY.model}}
+                            {{car.vehicleAttr.vehicleMMY.model}}
                         </td>
                         <td>
-                            {{car.manufacturerCode}}
+                            {{car.vehicleAttr.engineType}}
                         </td>
                         <td>
-                            {{car.engineType}}
+                            {{car.vehicleAttr.toolType.name}}
                         </td>
                         <td>
-                            {{car.toolType.name}}
+                            <span v-bind:class="{'full' : car.collisionCoverage.coverageType.status===1,
+                           'partial' : car.collisionCoverage.coverageType.status===2,
+                           'noCoverage' : car.collisionCoverage.coverageType.status===3,
+                           'na' : car.collisionCoverage.coverageType.status===4}">
+                                Collision
+                            </span>
                         </td>
                         <td>
-                            <span class="glyphicon glyphicon-check" style="color:green;" v-if="car.isJ2534Compatible"></span>
+                            <span v-bind:class="{'full' : car.mechanicalCoverage.coverageType.status===1,
+                            'partial' : car.mechanicalCoverage.coverageType.status===2,
+                            'noCoverage' : car.mechanicalCoverage.coverageType.status===3,
+                            'na' : car.mechanicalCoverage.coverageType.status===4}">
+                                Mechanical
+                            </span>
+                        </td>
+                        <td>
+                            <span v-bind:class="{'full' : car.calibrationCoverage.coverageType.status===1,
+                            'partial' : car.calibrationCoverage.coverageType.status===2,
+                            'noCoverage' : car.calibrationCoverage.coverageType.status===3,
+                            'na' : car.calibrationCoverage.coverageType.status===4}">
+                                Calibration
+                            </span>
+                        </td>
+                        <td>
+                            <span class="glyphicon glyphicon-check" style="color:green;" v-if="car.vehicleAttr.isJ2534Compatible"></span>
                             <span class="glyphicon glyphicon-remove" style="color:red;" v-else></span>
                         </td>
                         <td>
-                            <div class="btn btn-primary" @click="editEntry(car.id)">
+                            <div class="btn btn-primary" @click="editEntry(car.vehicleAttr.id)">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </div>
                         </td>

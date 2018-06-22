@@ -14,12 +14,13 @@ var motorcade = new Vue({
     top: "0px",
     left: "0px",
     editing: false,
+    numberShown: 0,
     // Search fields
     modelSearch: "",
     makeSearch: "",
     yearSearch: "",
     codeSearch: "",
-    toolTypeSearch: "",
+    engineSearch: "",
     // Data transfer fields
     id: "",
     make: "",
@@ -28,6 +29,9 @@ var motorcade = new Vue({
     toolTypeId: 0,
     manufacturerCode: "",
     engineType: "",
+    collisionCoverage: 0,
+    mechanicalCoverage: 0,
+    calibrationCoverage: 0,
     isJ2534Compatible: false,
 
     get vehicleMMY() {
@@ -40,11 +44,15 @@ var motorcade = new Vue({
       console.log(token);
       console.log(event);
 
+      if($('tbody').children().css('display') !== "none") {
+        alert("It appears there is already an entry matching this description. Are there any details you forgot to provide?");
+        return;
+      }
+
       if (
         this.make !== "" &&
         this.model !== "" &&
-        typeof this.year === "number" &&
-        this.manufacturerCode !== ""
+        typeof this.year === "number" 
       ) {
         axios({
           method: "post",
@@ -57,7 +65,14 @@ var motorcade = new Vue({
             manufacturerCode: this.manufacturerCode,
             engineType: this.engineType,
             description: this.make + " " + this.model + " " + this.engineType,
-            toolTypeId: this.toolTypeId,
+            toolTypeId: this.toolTypeId == 0 ? 4 : this.toolTypeId,
+            scanType: this.scanType,
+            collisionCoverage:
+              this.collisionCoverage == 0 ? 4 : this.collisionCoverage,
+            mechanicalCoverage:
+              this.mechanicalCoverage == 0 ? 4 : this.mechanicalCoverage,
+            calibrationCoverage:
+              this.calibrationCoverage == 0 ? 4 : this.calibrationCoverage,
             isJ2534Compatible: this.isJ2534Compatible
           }
         }).then(function(response) {
@@ -65,7 +80,7 @@ var motorcade = new Vue({
         });
       } else {
         console.log("Failure, failure.");
-        alert("Please provide a year, make, model, and manufacturer code.");
+        alert("Please provide a year, make, and model.");
       }
     },
 
@@ -89,6 +104,10 @@ var motorcade = new Vue({
             engineType: this.engineType,
             description: this.make + " " + this.model + " " + this.engineType,
             toolTypeId: this.toolTypeId,
+            scanType: this.scanType,
+            collisionCoverage: this.collisionCoverage,
+            mechanicalCoverage: this.mechanicalCoverage,
+            calibrationCoverage: this.calibrationCoverage,
             isJ2534Compatible: this.isJ2534Compatible
           }
         }).then(function(response) {
@@ -141,15 +160,21 @@ var motorcade = new Vue({
       this.id = id;
 
       var car = this.carData.find(function(obj) {
-        return obj.id === id;
+        return obj.vehicleAttr.id === id;
       });
 
-      this.make = car.vehicleMMY.make;
-      this.model = car.vehicleMMY.model;
-      this.year = car.vehicleMMY.year;
-      this.manufacturerCode = car.manufacturerCode;
-      this.isJ2534Compatible = car.isJ2534Compatible;
-      this.toolTypeId = car.toolType.id;
+      console.log(car);
+
+      this.make = car.vehicleAttr.vehicleMMY.make;
+      this.model = car.vehicleAttr.vehicleMMY.model;
+      this.year = car.vehicleAttr.vehicleMMY.year;
+      this.engineType = car.vehicleAttr.engineType;
+      this.manufacturerCode = car.vehicleAttr.manufacturerCode;
+      this.isJ2534Compatible = car.vehicleAttr.isJ2534Compatible;
+      this.collisionCoverage = car.collisionCoverage.coverageType.status;
+      this.mechanicalCoverage = car.mechanicalCoverage.coverageType.status;
+      this.calibrationCoverage = car.calibrationCoverage.coverageType.status;
+      this.toolTypeId = car.vehicleAttr.toolType.id;
     },
 
     contextMenu: function(e) {
@@ -166,9 +191,18 @@ var motorcade = new Vue({
       this.make = "";
       this.model = "";
       this.year = "";
+      this.yearSearch = "",
+      this.makeSearch = "",
+      this.modelSearch = "",
+      this.engineSearch = "",
+      this.codeSearch = "",
       this.editing = false;
       this.manufacturerCode = "";
       this.toolTypeId = "0";
+      this.engineType = "";
+      this.collisionCoverage = 0;
+      this.mechanicalCoverage = 0;
+      this.calibrationCoverage = 0;
       this.isJ2534Compatible = false;
     },
 
