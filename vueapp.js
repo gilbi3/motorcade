@@ -15,12 +15,6 @@ var motorcade = new Vue({
     left: "0px",
     editing: false,
     numberShown: 0,
-    // Search fields
-    modelSearch: "",
-    makeSearch: "",
-    yearSearch: "",
-    codeSearch: "",
-    engineSearch: "",
     // Data transfer fields
     id: "",
     make: "",
@@ -52,7 +46,7 @@ var motorcade = new Vue({
       if (
         this.make !== "" &&
         this.model !== "" &&
-        typeof this.year === "number" 
+        this.year !== "" 
       ) {
         axios({
           method: "post",
@@ -191,11 +185,6 @@ var motorcade = new Vue({
       this.make = "";
       this.model = "";
       this.year = "";
-      this.yearSearch = "",
-      this.makeSearch = "",
-      this.modelSearch = "",
-      this.engineSearch = "",
-      this.codeSearch = "",
       this.editing = false;
       this.manufacturerCode = "";
       this.toolTypeId = "0";
@@ -205,14 +194,6 @@ var motorcade = new Vue({
       this.calibrationCoverage = 0;
       this.isJ2534Compatible = false;
     },
-
-    clearSearch: function() {
-      this.modelSearch = "";
-      this.makeSearch = "";
-      this.codeSearch = "";
-      this.toolTypeSearch = "";
-      this.yearSearch = "";
-    }
   },
 
   mounted() {

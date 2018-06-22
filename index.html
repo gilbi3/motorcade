@@ -24,17 +24,17 @@
         <h3 v-if="!editing">Make an Entry</h3>
         <h1 v-text="vehicleMMY"></h1>
 
-        <form style="width: 70%; margin: auto;" class="form-inline">
+        <form style="width: 50%; margin: auto;" class="form-inline">
             <input type="hidden" v-model="id">
-            <input v-model.lazy.number="year, yearSearch" type="number" id="vehicleYear" class="form-control" main="1950" max="2200" placeholder="Year"
+            <input v-model.lazy.number="year" type="number" id="vehicleYear" class="form-control mmy" main="1950" max="2200" placeholder="Year"
                 onfocus="if(!motorcade.editing){this.value=''}" required>
-            <input v-model.lazy.trim="make, makeSearch" type="text" id="vehicleMake" class="form-control" placeholder="Make" onfocus="if(!motorcade.editing){this.value=''}"
+            <input v-model.lazy.trim="make" type="text" id="vehicleMake" class="form-control mmy" placeholder="Make" onfocus="if(!motorcade.editing){this.value=''}"
                 required>
-            <input v-model.lazy.trim="model, modelSearch" type="text" id="vehicleModel" class="form-control" placeholder="Model" onfocus="if(!motorcade.editing){this.value=''}"
+            <input v-model.lazy.trim="model" type="text" id="vehicleModel" class="form-control mmy" placeholder="Model" onfocus="if(!motorcade.editing){this.value=''}"
                 required>
-            <input v-model.lazy.trim="manufacturerCode, codeSearch" type="text" id="vehicleManufacturerCode" class="form-control" placeholder="Manufacturer Code"
+            <input v-model.lazy.trim="manufacturerCode" type="text" id="vehicleManufacturerCode" class="form-control" placeholder="Manufacturer Code"
                 onfocus="if(!motorcade.editing){this.value=''}" required>
-            <input v-model.lazy.trim="engineType, engineSearch" type="text" id="vehicleEngineType" class="form-control" placeholder="Engine Type" onfocus="if(!motorcade.editing){this.value=''}"
+            <input v-model.lazy.trim="engineType" type="text" id="vehicleEngineType" class="form-control" placeholder="Engine Type" onfocus="if(!motorcade.editing){this.value=''}"
                 required>
             <select v-model.lazy.number="toolTypeId" class="form-control" id="vehicleToolType">
                 <option value="0" disabled>Choose ToolType</option>
@@ -103,15 +103,15 @@
         <div>
             <h2>Database</h2>
             <div class="searchDiv" class="form-group">
-                <input class="form-control" type="number" v-model="yearSearch" placeholder="Search by Year">
-                <input class="form-control" type="text" v-model="makeSearch" placeholder="Search by Make">
-                <input class="form-control" type="text" v-model="modelSearch" placeholder="Search by Model">
+                <input class="form-control" type="number" v-model="year" placeholder="Search by Year">
+                <input class="form-control" type="text" v-model="make" placeholder="Search by Make">
+                <input class="form-control" type="text" v-model="model" placeholder="Search by Model">
                 <br>
-                <input class="form-control" type="text" v-model="codeSearch" placeholder="Search by Manufacturer Code">
+                <input class="form-control" type="text" v-model="manufacturerCode" placeholder="Search by Manufacturer Code">
                 <br>
-                <input class="form-control" type="text" v-model="engineSearch" placeholder="Search by Engine Type">
+                <input class="form-control" type="text" v-model="engineType" placeholder="Search by Engine Type">
 
-                <div class="btn clear-search-btn" @click="clearSearch">Clear
+                <div class="btn clear-search-btn" @click="clearForm">Clear
                     <span class="glyphicon glyphicon-trash"></span>
                 </div>
             </div>
@@ -129,11 +129,11 @@
                     <th></th>
                 </thead>
                 <tbody>
-                    <tr id="searchResults" v-for="car in carData" v-show="car.vehicleAttr.vehicleMMY.model.toLowerCase().includes(modelSearch.toLowerCase()) 
-                                                     && car.vehicleAttr.vehicleMMY.make.toLowerCase().includes(makeSearch.toLowerCase())
-                                                     && car.vehicleAttr.vehicleMMY.year.toString().includes(yearSearch)
-                                                     && car.vehicleAttr.engineType.toString().includes(engineSearch)
-                                                     && car.vehicleAttr.manufacturerCode.toString().includes(codeSearch)">
+                    <tr id="searchResults" v-for="car in carData" v-show="car.vehicleAttr.vehicleMMY.model.toLowerCase().includes(model.toLowerCase()) 
+                                                     && car.vehicleAttr.vehicleMMY.make.toLowerCase().includes(make.toLowerCase())
+                                                     && car.vehicleAttr.vehicleMMY.year.toString().includes(year)
+                                                     && car.vehicleAttr.engineType.toString().includes(engineType.toLowerCase())
+                                                     && car.vehicleAttr.manufacturerCode.toString().includes(manufacturerCode.toLowerCase())">
                         <td>
                             {{car.vehicleAttr.vehicleMMY.year}}
                         </td>
