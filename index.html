@@ -111,7 +111,7 @@
     </div>
         <div v-show="dataView">
             <h2>Database</h2>
-            <div class="searchDiv" class="form-group">
+            <div class="searchDiv" class="form-group" @keyup="checkMatches()">
                 <input class="form-control" type="number" v-model="year" placeholder="Year">
                 <input class="form-control" type="text" v-model="make" placeholder="Make">
                 <input class="form-control" type="text" v-model="model" placeholder="Model">
@@ -192,6 +192,7 @@
                     </tr>
                 </tbody>
             </table>
+            <div v-show="noMatchesFound">Not found<br><a style="cursor:pointer;" @click="viewFormWithFields()">Create?</a> </div>
         </div>
 
     </div>

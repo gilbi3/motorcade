@@ -199,6 +199,10 @@ var motorcade = new Vue({
       this.clearForm();
     },
 
+    viewFormWithFields: function() {
+      this.dataView = false;
+    },
+
     viewData: function () {
       this.dataView = true;
       this.clearForm();
