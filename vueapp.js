@@ -30,23 +30,32 @@ var motorcade = new Vue({
 
     get vehicleMMY() {
       return this.year + " " + this.make + " " + this.model + " " + this.engineType;
+    },
+
+    get noMatchesFound() {
+      if ($('tbody').children().css('display') !== "none") {
+        return false;
+      }
+      else
+      {
+        return true;
+      }
     }
   },
 
   methods: {
-    submitForm: function(token, event) {
-      console.log(token);
-      console.log(event);
+    submitForm: function () {
 
-      if($('tbody').children().css('display') !== "none") {
-        alert("It appears there is already an entry matching this description. Are there any details you forgot to provide?");
+      if (this.matchesFound()) {
+        alert("Matching records found.");
+        this.dataView = true;
         return;
       }
 
       if (
         this.make !== "" &&
         this.model !== "" &&
-        this.year !== "" 
+        this.year !== ""
       ) {
         axios({
           method: "post",
@@ -69,7 +78,7 @@ var motorcade = new Vue({
               this.calibrationCoverage == 0 ? 4 : this.calibrationCoverage,
             isJ2534Compatible: this.isJ2534Compatible
           }
-        }).then(function(response) {
+        }).then(function (response) {
           window.location.reload();
         });
       } else {
@@ -78,7 +87,7 @@ var motorcade = new Vue({
       }
     },
 
-    submitEditForm: function() {
+    submitEditForm: function () {
       if (
         this.make !== "" &&
         this.model !== "" &&
@@ -104,7 +113,7 @@ var motorcade = new Vue({
             calibrationCoverage: this.calibrationCoverage,
             isJ2534Compatible: this.isJ2534Compatible
           }
-        }).then(function(response) {
+        }).then(function (response) {
           window.location.reload();
         });
       } else {
@@ -113,7 +122,7 @@ var motorcade = new Vue({
       }
     },
 
-    submitDeleteForm: function() {
+    submitDeleteForm: function () {
       if (
         this.make !== "" &&
         this.model !== "" &&
@@ -130,7 +139,7 @@ var motorcade = new Vue({
           method: "delete",
           url: "http://localhost:65308/api/Motorcade/" + this.id,
           contentType: "application/json; charset=utf-8"
-        }).then(function(response) {
+        }).then(function (response) {
           window.location.reload();
         });
       } else {
@@ -139,22 +148,14 @@ var motorcade = new Vue({
       }
     },
 
-    editEntry: function(id) {
-      $("html")
-        .stop()
-        .animate(
-          {
-            scrollTop: 0
-          },
-          "slow",
-          "swing"
-        );
+    editEntry: function (id) {
+      $("html").stop().animate({ scrollTop: 0 }, "slow", "swing");
 
       this.editing = true;
       this.id = id;
       this.viewForm();
 
-      var car = this.carData.find(function(obj) {
+      var car = this.carData.find(function (obj) {
         return obj.vehicleAttr.id === id;
       });
 
@@ -172,17 +173,21 @@ var motorcade = new Vue({
       this.toolTypeId = car.vehicleAttr.toolType.id;
     },
 
-    contextMenu: function(e) {
+    matchesFound() {
+      return $('tbody').children().css('display') !== "none";
+    },
+
+    contextMenu: function (e) {
       this.showContextMenu = true;
       this.top = e.y + "px";
       this.left = e.x + "px";
     },
 
-    closeContextMenu: function() {
+    closeContextMenu: function () {
       this.showContextMenu = false;
     },
 
-    clearForm: function() {
+    clearForm: function () {
       this.make = "";
       this.model = "";
       this.year = "";
@@ -194,24 +199,27 @@ var motorcade = new Vue({
       this.mechanicalCoverage = 0;
       this.calibrationCoverage = 0;
       this.isJ2534Compatible = false;
+      $('#noMatchesFoundh3').css('display', 'none');
     },
 
-    viewForm: function() {
+    viewForm: function () {
       this.dataView = false;
     },
 
-    viewData: function() {
+    viewData: function () {
       this.dataView = true;
       this.clearForm();
     }
   },
 
   mounted() {
+
     axios
       .get("http://localhost:65308/api/Motorcade")
-      .then(response => (this.carData = response.data)),
-      axios
-        .get("http://localhost:65308/api/ToolType")
-        .then(response => (this.toolTypeData = response.data));
+      .then(response => (this.carData = response.data));
+
+    axios
+      .get("http://localhost:65308/api/ToolType")
+      .then(response => (this.toolTypeData = response.data));
   }
 });
