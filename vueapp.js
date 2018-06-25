@@ -38,7 +38,7 @@ var motorcade = new Vue({
     submitForm: function () {
 
       if (!this.noMatchesFound) {
-        alert("Matching records found.");
+        alert("Matching record(s) found.");
         this.dataView = true;
         return;
       }
@@ -83,8 +83,7 @@ var motorcade = new Vue({
       if (
         this.make !== "" &&
         this.model !== "" &&
-        typeof this.year === "number" &&
-        this.manufacturerCode !== ""
+        this.year !== ""
       ) {
         axios({
           method: "put",
@@ -149,13 +148,11 @@ var motorcade = new Vue({
 
       this.editing = true;
       this.id = id;
-      this.viewForm();
+      this.viewFormWithFields();
 
       var car = this.carData.find(function (obj) {
         return obj.vehicleAttr.id === id;
       });
-
-      console.log(car);
 
       this.make = car.vehicleAttr.vehicleMMY.make;
       this.model = car.vehicleAttr.vehicleMMY.model;

@@ -21,94 +21,99 @@
             </a>
             <div class="container-fluid">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#" @click="viewForm" v-show="dataView">New Entry</a></li>
-                    <li><a href="#" @click="viewData" v-show="!dataView" >Coverage</a></li>
+                    <li>
+                        <a href="#" @click="viewForm" v-show="dataView">New Entry</a>
+                    </li>
+                    <li>
+                        <a href="#" @click="viewData" v-show="!dataView">Coverage</a>
+                    </li>
                 </ul>
-            </div> 
+            </div>
         </nav>
 
-    <div v-show="!dataView">
-        <h3 v-if="!editing">New Entry</h3>
-        <h3 v-else>Editing:</h3>
-        <h1 v-text="vehicleMMY"></h1>
-        <h3 v-show="noMatchesFound" id="noMatchesFoundh3"><span class="glyphicon glyphicon-check" style="color:green"></span>No matches found.</h3>
+        <div v-show="!dataView">
+            <h3 v-show="!editing">New Entry</h3>
+            <h3 v-show="editing">Editing:</h3>
+            <h1 v-text="vehicleMMY"></h1>
+            <h3 v-show="noMatchesFound" id="noMatchesFoundh3">
+                <span class="glyphicon glyphicon-check" style="color:green"></span>No matches found.</h3>
 
-        <form style="width: 70%; margin: auto;" class="form-inline" @keyup="motorcade.checkMatches()">
-            <input type="hidden" v-model="id">
-            <input v-model.lazy.number="year" type="number" id="vehicleYear" class="form-control mmy" main="1950" max="2200" placeholder="Year"
-                onfocus="if(!motorcade.editing){this.value=''}" required>
-            <input v-model.lazy.trim="make" type="text" id="vehicleMake" class="form-control mmy" placeholder="Make" onfocus="if(!motorcade.editing){this.value=''}"
-                required>
-            <input v-model.lazy.trim="model" type="text" id="vehicleModel" class="form-control mmy" placeholder="Model" onfocus="if(!motorcade.editing){this.value=''}"
-                required>
-            <input v-model.lazy.trim="manufacturerCode" type="text" id="vehicleManufacturerCode" class="form-control" placeholder="Manufacturer Code"
-                onfocus="if(!motorcade.editing){this.value=''}" required>
-            <input v-model.lazy.trim="engineType" type="text" id="vehicleEngineType" class="form-control" placeholder="Engine Type" onfocus="if(!motorcade.editing){this.value=''}"
-                required>
-            <select v-model.lazy.number="toolTypeId" class="form-control" id="vehicleToolType">
-                <option value="0" disabled>Choose ToolType</option>
-                <option v-for="type in toolTypeData" v-bind:value="type.id">{{type.name}}</option>
-            </select>
-            <div class="form-group" style="width: 100%;">
-                <label for="vehicleCollisionCoverage">Collision Coverage</label>
-                <select v-model.lazy.number="collisionCoverage" class="form-control" id="vehicleCollisionCoverage">
-                    <option value="0" disabled>Choose Status</option>
-                    <option value="1">Full</option>
-                    <option value="2">Partial</option>
-                    <option value="3">No Coverage</option>
-                    <option value="4">N/A</option>
+            <form style="width: 70%; margin: auto;" class="form-inline" @keyup="motorcade.checkMatches()">
+                <input type="hidden" v-model="id">
+                <input v-model.lazy.number="year" type="number" id="vehicleYear" class="form-control mmy" main="1950" max="2200" placeholder="Year"
+                    onfocus="if(!motorcade.editing){this.value=''}" required>
+                <input v-model.lazy.trim="make" type="text" id="vehicleMake" class="form-control mmy" placeholder="Make" onfocus="if(!motorcade.editing){this.value=''}"
+                    required>
+                <input v-model.lazy.trim="model" type="text" id="vehicleModel" class="form-control mmy" placeholder="Model" onfocus="if(!motorcade.editing){this.value=''}"
+                    required>
+                <input v-model.lazy.trim="engineType" type="text" id="vehicleEngineType" class="form-control" placeholder="Engine Type" onfocus="if(!motorcade.editing){this.value=''}"
+                    required>
+                <input v-model.lazy.trim="manufacturerCode" type="text" id="vehicleManufacturerCode" class="form-control" placeholder="Manufacturer Code"
+                    onfocus="if(!motorcade.editing){this.value=''}" required>
+                <select v-model.lazy.number="toolTypeId" class="form-control" id="vehicleToolType">
+                    <option value="0" disabled>Choose ToolType</option>
+                    <option v-for="type in toolTypeData" v-bind:value="type.id">{{type.name}}</option>
                 </select>
-            </div>
-            <div class="form-group" style="width: 100%;">
-                <label for="mechanicalCoverage">Mechanical Coverage</label>
-                <select v-model.lazy.number="mechanicalCoverage" class="form-control" id="vehicleMechanicalCoverage">
-                    <option value="0" disabled>Choose Status</option>
-                    <option value="1">Full</option>
-                    <option value="2">Partial</option>
-                    <option value="3">No Coverage</option>
-                    <option value="4">N/A</option>
-                </select>
-            </div>
-            <div class="form-group" style="width: 100%;">
-                <label for="calibrationCoverage">Calibration Coverage</label>
-                <select v-model.lazy.number="calibrationCoverage" class="form-control" id="vehicleCalibrationCoverage">
-                    <option value="0" disabled>Choose Status</option>
-                    <option value="1">Full</option>
-                    <option value="2">Partial</option>
-                    <option value="3">No Coverage</option>
-                    <option value="4">N/A</option>
-                </select>
-            </div>
-            <br>
-            <div class="form-group">
-                <label for="vehicleJ2534">J2534?</label>
-                <input v-model.trim="isJ2534Compatible" type="checkbox" class="form-control">
-            </div>
+                <div class="form-group" style="width: 100%;">
+                    <label for="vehicleCollisionCoverage">Collision Coverage</label>
+                    <select v-model.lazy.number="collisionCoverage" class="form-control" id="vehicleCollisionCoverage">
+                        <option value="0" disabled>Choose Status</option>
+                        <option value="1">Full</option>
+                        <option value="2">Partial</option>
+                        <option value="3">No Coverage</option>
+                        <option value="4">N/A</option>
+                    </select>
+                </div>
+                <div class="form-group" style="width: 100%;">
+                    <label for="mechanicalCoverage">Mechanical Coverage</label>
+                    <select v-model.lazy.number="mechanicalCoverage" class="form-control" id="vehicleMechanicalCoverage">
+                        <option value="0" disabled>Choose Status</option>
+                        <option value="1">Full</option>
+                        <option value="2">Partial</option>
+                        <option value="3">No Coverage</option>
+                        <option value="4">N/A</option>
+                    </select>
+                </div>
+                <div class="form-group" style="width: 100%;">
+                    <label for="calibrationCoverage">Calibration Coverage</label>
+                    <select v-model.lazy.number="calibrationCoverage" class="form-control" id="vehicleCalibrationCoverage">
+                        <option value="0" disabled>Choose Status</option>
+                        <option value="1">Full</option>
+                        <option value="2">Partial</option>
+                        <option value="3">No Coverage</option>
+                        <option value="4">N/A</option>
+                    </select>
+                </div>
+                <br>
+                <div class="form-group">
+                    <label for="vehicleJ2534">J2534?</label>
+                    <input v-model.trim="isJ2534Compatible" type="checkbox" class="form-control">
+                </div>
 
-            <hr>
+                <hr>
 
-            <div class="btn btn-primary" v-on:click="clearForm">Cancel</div>
-            <div @click.stop="submitForm()" class="btn btn-success" v-if="!editing">Submit
-                <span class="glyphicon glyphicon-floppy-disk"></span>
-            </div>
-            <div @click.stop="submitDeleteForm()" class="btn btn-danger" v-if="editing">Delete
-                <span class="glyphicon glyphicon-remove"></span>
-            </div>
-            <div @click.stop="submitEditForm()" class="btn btn-success" v-if="editing">Submit Changes
-                <span class="glyphicon glyphicon-floppy-disk"></span>
-            </div>
+                <div class="btn btn-primary" v-on:click="clearForm">Cancel</div>
+                <div @click.stop="submitForm()" class="btn btn-success" v-if="!editing">Submit
+                    <span class="glyphicon glyphicon-floppy-disk"></span>
+                </div>
+                <div @click.stop="submitDeleteForm()" class="btn btn-danger" v-if="editing">Delete
+                    <span class="glyphicon glyphicon-remove"></span>
+                </div>
+                <div @click.stop="submitEditForm()" class="btn btn-success" v-if="editing">Submit Changes
+                    <span class="glyphicon glyphicon-floppy-disk"></span>
+                </div>
 
-            <ul id="myContextMenu" v-if="showContextMenu" v-bind:style="{top:top, left:left, width: '150px', position: 'absolute', background: 'lightgray'}">
-                <li>
-                    <a href=# @click="clearForm">Clear Form</a>
-                </li>
-            </ul>
-        </form>
+                <ul id="myContextMenu" v-if="showContextMenu" v-bind:style="{top:top, left:left, width: '150px', position: 'absolute', background: 'lightgray'}">
+                    <li>
+                        <a href=# @click="clearForm">Clear Form</a>
+                    </li>
+                </ul>
+            </form>
 
-        <div v-else>
-            <h2>Database disconnected.</h2>
+            <div v-else>
+                <h2>Database disconnected.</h2>
+            </div>
         </div>
-    </div>
         <div v-show="dataView">
             <h2>Database</h2>
             <div class="searchDiv" class="form-group" @keyup="checkMatches()">
@@ -192,7 +197,10 @@
                     </tr>
                 </tbody>
             </table>
-            <div v-show="noMatchesFound">Not found<br><a style="cursor:pointer;" @click="viewFormWithFields()">Create?</a> </div>
+            <div v-show="noMatchesFound">Not found
+                <br>
+                <a style="cursor:pointer;" @click="viewFormWithFields()">Create?</a>
+            </div>
         </div>
 
     </div>

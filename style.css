@@ -82,9 +82,10 @@ th {
   display: inline;
 }
 #motorcade {
-  height: 1200px;
+  height: 100%;
   width: 80%;
   margin: auto;
+  margin-bottom: 40px;
 }
 .clear-search-btn {
   width: 30%;
