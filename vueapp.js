@@ -6,7 +6,7 @@ var motorcade = new Vue({
   el: "#motorcade",
 
   data: {
-    // App fields
+    // App states
     appName: "Cover",
     showContextMenu: false,
     carData: null,
@@ -14,7 +14,7 @@ var motorcade = new Vue({
     top: "0px",
     left: "0px",
     editing: false,
-    numberShown: 0,
+    dataView: false,
     // Data transfer fields
     id: "",
     make: "",
@@ -152,6 +152,7 @@ var motorcade = new Vue({
 
       this.editing = true;
       this.id = id;
+      this.viewForm();
 
       var car = this.carData.find(function(obj) {
         return obj.vehicleAttr.id === id;
@@ -194,6 +195,15 @@ var motorcade = new Vue({
       this.calibrationCoverage = 0;
       this.isJ2534Compatible = false;
     },
+
+    viewForm: function() {
+      this.dataView = false;
+    },
+
+    viewData: function() {
+      this.dataView = true;
+      this.clearForm();
+    }
   },
 
   mounted() {

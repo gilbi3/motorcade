@@ -15,12 +15,19 @@
 
     <div id="motorcade" @keypress.del="clearForm" @click="closeContextMenu" @contextmenu.prevent="contextMenu" v-cloak>
 
-        <nav class="navbar navbar-light bg-light">
+        <nav class="navbar navbar-light bg-light justify-content-between">
             <a class="navbar-brand fonty" href="#">
                 <img src="astechlogo.jpeg" width="100" height="50" class="d-inline-block align-top" alt=""> {{appName}}
             </a>
+            <div class="container-fluid">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#" @click="viewForm" v-show="dataView">New Entry</a></li>
+                    <li><a href="#" @click="viewData" v-show="!dataView" >Coverage</a></li>
+                </ul>
+            </div> 
         </nav>
 
+    <div v-show="!dataView">
         <h3 v-if="!editing">New Entry</h3>
         <h3 v-else>Editing:</h3>
         <h1 v-text="vehicleMMY"></h1>
@@ -100,18 +107,16 @@
         <div v-else>
             <h2>Database disconnected.</h2>
         </div>
-        <hr>
-        <div>
+    </div>
+        <div v-show="dataView">
             <h2>Database</h2>
             <div class="searchDiv" class="form-group">
-                <input class="form-control" type="number" v-model="year" placeholder="Search by Year">
-                <input class="form-control" type="text" v-model="make" placeholder="Search by Make">
-                <input class="form-control" type="text" v-model="model" placeholder="Search by Model">
+                <input class="form-control" type="number" v-model="year" placeholder="Year">
+                <input class="form-control" type="text" v-model="make" placeholder="Make">
+                <input class="form-control" type="text" v-model="model" placeholder="Model">
                 <br>
-                <input class="form-control" type="text" v-model="manufacturerCode" placeholder="Search by Manufacturer Code">
-                <br>
-                <input class="form-control" type="text" v-model="engineType" placeholder="Search by Engine Type">
-
+                <input class="form-control" type="text" v-model="manufacturerCode" placeholder="Manufacturer Code">
+                <input class="form-control" type="text" v-model="engineType" placeholder="Engine Type">
                 <div class="btn clear-search-btn" @click="clearForm">Clear
                     <span class="glyphicon glyphicon-trash"></span>
                 </div>
