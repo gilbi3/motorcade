@@ -15,6 +15,7 @@ var motorcade = new Vue({
     left: "0px",
     editing: false,
     dataView: false,
+    noMatchesFound: false,
     // Data transfer fields
     id: "",
     make: "",
@@ -30,23 +31,13 @@ var motorcade = new Vue({
 
     get vehicleMMY() {
       return this.year + " " + this.make + " " + this.model + " " + this.engineType;
-    },
-
-    get noMatchesFound() {
-      if ($('tbody').children().css('display') !== "none") {
-        return false;
-      }
-      else
-      {
-        return true;
-      }
     }
   },
 
   methods: {
     submitForm: function () {
 
-      if (this.matchesFound()) {
+      if (!this.noMatchesFound) {
         alert("Matching records found.");
         this.dataView = true;
         return;
@@ -79,6 +70,7 @@ var motorcade = new Vue({
             isJ2534Compatible: this.isJ2534Compatible
           }
         }).then(function (response) {
+          alert("Saved!");
           window.location.reload();
         });
       } else {
@@ -123,12 +115,7 @@ var motorcade = new Vue({
     },
 
     submitDeleteForm: function () {
-      if (
-        this.make !== "" &&
-        this.model !== "" &&
-        typeof this.year === "number" &&
-        this.manufacturerCode !== ""
-      ) {
+     
         var dec = confirm("Are you sure you want to delete this entry?");
 
         if (dec == false) {
@@ -141,11 +128,20 @@ var motorcade = new Vue({
           contentType: "application/json; charset=utf-8"
         }).then(function (response) {
           window.location.reload();
-        });
-      } else {
-        console.log("Failure, failure.");
-        alert("Please provide a year, make, model, and manufacturer code.");
+        }); 
+    },
+
+    checkMatches: function() {
+
+      var list = $('tr#searchResults');
+      for(var i = 0; i < list.length; i++) {
+        var item = $(list[i]);
+        if(item.css('display') !== 'none') {
+          this.noMatchesFound = false;
+          return;
+        }
       }
+      this.noMatchesFound = true;
     },
 
     editEntry: function (id) {
@@ -171,10 +167,6 @@ var motorcade = new Vue({
       this.mechanicalCoverage = car.mechanicalCoverage.status;
       this.calibrationCoverage = car.calibrationCoverage.status;
       this.toolTypeId = car.vehicleAttr.toolType.id;
-    },
-
-    matchesFound() {
-      return $('tbody').children().css('display') !== "none";
     },
 
     contextMenu: function (e) {
@@ -204,6 +196,7 @@ var motorcade = new Vue({
 
     viewForm: function () {
       this.dataView = false;
+      this.clearForm();
     },
 
     viewData: function () {

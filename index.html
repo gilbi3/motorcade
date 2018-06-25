@@ -33,7 +33,7 @@
         <h1 v-text="vehicleMMY"></h1>
         <h3 v-show="noMatchesFound" id="noMatchesFoundh3"><span class="glyphicon glyphicon-check" style="color:green"></span>No matches found.</h3>
 
-        <form style="width: 70%; margin: auto;" class="form-inline" @keyup="motorcade.$forceUpdate()">
+        <form style="width: 70%; margin: auto;" class="form-inline" @keyup="motorcade.checkMatches()">
             <input type="hidden" v-model="id">
             <input v-model.lazy.number="year" type="number" id="vehicleYear" class="form-control mmy" main="1950" max="2200" placeholder="Year"
                 onfocus="if(!motorcade.editing){this.value=''}" required>
@@ -88,7 +88,7 @@
             <hr>
 
             <div class="btn btn-primary" v-on:click="clearForm">Cancel</div>
-            <div @click.stop="submitForm(motorcade, $event)" class="btn btn-success" v-if="!editing" v-bind:disabled="!noMatchesFound">Submit
+            <div @click.stop="submitForm()" class="btn btn-success" v-if="!editing">Submit
                 <span class="glyphicon glyphicon-floppy-disk"></span>
             </div>
             <div @click.stop="submitDeleteForm()" class="btn btn-danger" v-if="editing">Delete
