@@ -9,6 +9,7 @@ var motorcade = new Vue({
     // App states
     appName: "Cover",
     showContextMenu: false,
+    baseData: null,
     carData: null,
     toolTypeData: null,
     top: "0px",
@@ -25,9 +26,11 @@ var motorcade = new Vue({
     manufacturerCode: "",
     engineType: "",
     collisionCoverage: 0,
+    collisionJ2534: false,
     mechanicalCoverage: 0,
+    mechanicalJ2534: false,
     calibrationCoverage: 0,
-    isJ2534Compatible: false,
+    calibrationJ2534: false,
 
     get vehicleMMY() {
       return this.year + " " + this.make + " " + this.model + " " + this.engineType;
@@ -35,10 +38,25 @@ var motorcade = new Vue({
   },
 
   methods: {
+
+    getRefinedData: function() {
+      axios({
+        method: "post",
+        url: "http://localhost:65308/api/VehicleDeduction",
+        contentType: "application/json; charset=utf-8",
+        data: {
+          make: this.make,
+          model: this.model,
+          year: this.year
+        }
+      }).then(response => (this.baseData = response.data));;
+    },
+
+
     submitForm: function () {
 
       if (!this.noMatchesFound) {
-        alert("Matching record(s) found.");
+        alert("Matching entry found.");
         this.dataView = true;
         return;
       }
@@ -63,11 +81,13 @@ var motorcade = new Vue({
             scanType: this.scanType,
             collisionCoverage:
               this.collisionCoverage == 0 ? 4 : this.collisionCoverage,
+            collisionJ2534: this.collisionJ2534,
             mechanicalCoverage:
               this.mechanicalCoverage == 0 ? 4 : this.mechanicalCoverage,
+            mechanicalJ2534: this.mechanicalJ2534,
             calibrationCoverage:
               this.calibrationCoverage == 0 ? 4 : this.calibrationCoverage,
-            isJ2534Compatible: this.isJ2534Compatible
+            calibrationJ2534: this.calibrationJ2534
           }
         }).then(function (response) {
           alert("Saved!");
@@ -100,9 +120,11 @@ var motorcade = new Vue({
             toolTypeId: this.toolTypeId,
             scanType: this.scanType,
             collisionCoverage: this.collisionCoverage,
+            collisionJ2534 : this.collisionJ2534,
             mechanicalCoverage: this.mechanicalCoverage,
+            mechanicalJ2534 : this.mechanicalJ2534,
             calibrationCoverage: this.calibrationCoverage,
-            isJ2534Compatible: this.isJ2534Compatible
+            calibrationJ2534 : this.calibrationJ2534
           }
         }).then(function (response) {
           window.location.reload();
@@ -144,8 +166,7 @@ var motorcade = new Vue({
     },
 
     editEntry: function (id) {
-      $("html").stop().animate({ scrollTop: 0 }, "slow", "swing");
-
+     
       this.editing = true;
       this.id = id;
       this.viewFormWithFields();
@@ -159,10 +180,12 @@ var motorcade = new Vue({
       this.year = car.vehicleAttr.vehicleMMY.year;
       this.engineType = car.vehicleAttr.engineType;
       this.manufacturerCode = car.vehicleAttr.manufacturerCode;
-      this.isJ2534Compatible = car.vehicleAttr.isJ2534Compatible;
       this.collisionCoverage = car.collisionCoverage.status;
+      this.collisionJ2534 = car.collisionJ2534;
       this.mechanicalCoverage = car.mechanicalCoverage.status;
+      this.mechanicalJ2534 = car.mechanicalJ2534;
       this.calibrationCoverage = car.calibrationCoverage.status;
+      this.calibrationJ2534 = car.calibrationJ2534;
       this.toolTypeId = car.vehicleAttr.toolType.id;
     },
 
@@ -185,10 +208,13 @@ var motorcade = new Vue({
       this.toolTypeId = "0";
       this.engineType = "";
       this.collisionCoverage = 0;
+      this.collisionJ2534 = false;
       this.mechanicalCoverage = 0;
+      this.mechanicalJ2534 = false;
       this.calibrationCoverage = 0;
-      this.isJ2534Compatible = false;
-      $('#noMatchesFoundh3').css('display', 'none');
+      this.calibrationJ2534 = false;
+
+      this.getRefinedData();
     },
 
     viewForm: function () {
@@ -209,9 +235,13 @@ var motorcade = new Vue({
   mounted() {
 
     axios
+      .get("http://localhost:65308/api/VehicleDeduction")
+      .then(response => (this.baseData = response.data));
+
+    axios
       .get("http://localhost:65308/api/Motorcade")
       .then(response => (this.carData = response.data));
-
+      
     axios
       .get("http://localhost:65308/api/ToolType")
       .then(response => (this.toolTypeData = response.data));

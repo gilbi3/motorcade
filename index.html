@@ -35,22 +35,26 @@
             <h3 v-show="!editing">New Entry</h3>
             <h3 v-show="editing">Editing:</h3>
             <h1 v-text="vehicleMMY"></h1>
-            <h3 v-show="noMatchesFound" id="noMatchesFoundh3">
-                <span class="glyphicon glyphicon-check" style="color:green"></span>No matches found.</h3>
 
             <form style="width: 70%; margin: auto;" class="form-inline" @keyup="motorcade.checkMatches()">
                 <input type="hidden" v-model="id">
-                <input v-model.lazy.number="year" type="number" id="vehicleYear" class="form-control mmy" main="1950" max="2200" placeholder="Year"
-                    onfocus="if(!motorcade.editing){this.value=''}" required>
-                <input v-model.lazy.trim="make" type="text" id="vehicleMake" class="form-control mmy" placeholder="Make" onfocus="if(!motorcade.editing){this.value=''}"
-                    required>
-                <input v-model.lazy.trim="model" type="text" id="vehicleModel" class="form-control mmy" placeholder="Model" onfocus="if(!motorcade.editing){this.value=''}"
-                    required>
+                <select v-model="year" type="number" id="vehicleYear" class="form-control mmy" @change="getRefinedData">
+                        <option value="" selected="selected">Year</option>
+                        <option v-for="year in baseData.years" v-bind:value="year">{{year}}</option>
+                </select>
+                <select v-model="make"  id="vehicleMake" class="form-control mmy" @change="getRefinedData">
+                    <option value="" selected="selected">Make</option>
+                    <option v-for="make in baseData.makes" v-bind:value="make">{{make}}</option>
+                </select>
+                <select v-model="model" id="vehicleModel" class="form-control mmy" @change="getRefinedData">
+                    <option value="" selected="selected">Model</option>
+                    <option v-for="model in baseData.models" v-bind:value="model">{{model}}</option>
+                </select>
                 <input v-model.lazy.trim="engineType" type="text" id="vehicleEngineType" class="form-control" placeholder="Engine Type" onfocus="if(!motorcade.editing){this.value=''}"
                     required>
                 <input v-model.lazy.trim="manufacturerCode" type="text" id="vehicleManufacturerCode" class="form-control" placeholder="Manufacturer Code"
                     onfocus="if(!motorcade.editing){this.value=''}" required>
-                <select v-model.lazy.number="toolTypeId" class="form-control" id="vehicleToolType">
+                <select v-model.lazy.number="toolTypeId" class="form-control" id="vehicleToolType" required>
                     <option value="0" disabled>Choose ToolType</option>
                     <option v-for="type in toolTypeData" v-bind:value="type.id">{{type.name}}</option>
                 </select>
@@ -63,6 +67,8 @@
                         <option value="3">No Coverage</option>
                         <option value="4">N/A</option>
                     </select>
+                    <label for="vehicleJ2534">J2534?</label>
+                    <input v-model="collisionJ2534" type="checkbox" class="form-control">
                 </div>
                 <div class="form-group" style="width: 100%;">
                     <label for="mechanicalCoverage">Mechanical Coverage</label>
@@ -73,6 +79,8 @@
                         <option value="3">No Coverage</option>
                         <option value="4">N/A</option>
                     </select>
+                    <label for="vehicleJ2534">J2534?</label>
+                    <input v-model="mechanicalJ2534" type="checkbox" class="form-control">
                 </div>
                 <div class="form-group" style="width: 100%;">
                     <label for="calibrationCoverage">Calibration Coverage</label>
@@ -83,15 +91,11 @@
                         <option value="3">No Coverage</option>
                         <option value="4">N/A</option>
                     </select>
+                    <label for="vehicleJ2534">J2534?</label>
+                    <input v-model="calibrationJ2534" type="checkbox" class="form-control">
                 </div>
                 <br>
-                <div class="form-group">
-                    <label for="vehicleJ2534">J2534?</label>
-                    <input v-model.trim="isJ2534Compatible" type="checkbox" class="form-control">
-                </div>
-
                 <hr>
-
                 <div class="btn btn-primary" v-on:click="clearForm">Cancel</div>
                 <div @click.stop="submitForm()" class="btn btn-success" v-if="!editing">Submit
                     <span class="glyphicon glyphicon-floppy-disk"></span>
@@ -134,10 +138,9 @@
                     <th>Model</th>
                     <th>Engine</th>
                     <th>ToolType</th>
-                    <th></th>
-                    <th>Coverages</th>
-                    <th></th>
-                    <th>J2534</th>
+                    <th>Collision</th>
+                    <th>Mechanical</th>
+                    <th>Calibration</th>
                     <th></th>
                 </thead>
                 <tbody>
@@ -162,32 +165,31 @@
                             {{car.vehicleAttr.toolType.name}}
                         </td>
                         <td class="table-cell">
-                            <span v-bind:class="{'full' : car.collisionCoverage.status===1,
+                            <div v-bind:class="{'full' : car.collisionCoverage.status===1,
                            'partial' : car.collisionCoverage.status===2,
                            'noCoverage' : car.collisionCoverage.status===3,
                            'na' : car.collisionCoverage.status===4}">
-                                Collision
-                            </span>
+                           <span v-if="car.collisionJ2534">J</span>
+                           <div v-else style="height: 25px"></div>
+                        </div>
                         </td>
                         <td class="table-cell">
-                            <span v-bind:class="{'full' : car.mechanicalCoverage.status===1,
+                            <div v-bind:class="{'full' : car.mechanicalCoverage.status===1,
                             'partial' : car.mechanicalCoverage.status===2,
                             'noCoverage' : car.mechanicalCoverage.status===3,
                             'na' : car.mechanicalCoverage.status===4}">
-                                Mechanical
-                            </span>
+                            <span v-if="car.mechanicalJ2534">J</span>
+                            <div v-else style="height: 25px"></div>
+                        </div>
                         </td>
                         <td class="table-cell">
-                            <span v-bind:class="{'full' : car.calibrationCoverage.status===1,
+                            <div v-bind:class="{'full' : car.calibrationCoverage.status===1,
                             'partial' : car.calibrationCoverage.status===2,
                             'noCoverage' : car.calibrationCoverage.status===3,
                             'na' : car.calibrationCoverage.status===4}">
-                                Calibration
+                                <span v-if="car.calibrationJ2534">J</span>
+                                <div v-else style="height: 25px"></div>
                             </span>
-                        </td>
-                        <td class="table-cell">
-                            <span class="glyphicon glyphicon-check" style="color:green;" v-if="car.vehicleAttr.isJ2534Compatible"></span>
-                            <span class="glyphicon glyphicon-remove" style="color:red;" v-else></span>
                         </td>
                         <td class="table-cell">
                             <div class="btn btn-primary" @click="editEntry(car.vehicleAttr.id)">
