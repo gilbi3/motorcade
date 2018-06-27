@@ -10,7 +10,7 @@ var motorcade = new Vue({
     appName: "Cover",
     showContextMenu: false,
     baseData: null,
-    carData: null,
+    carData: [],
     toolTypeData: null,
     top: "0px",
     left: "0px",
@@ -39,6 +39,14 @@ var motorcade = new Vue({
 
   methods: {
 
+    setupData: function() {
+      axios({
+        method: "post",
+        url: "http://localhost:65308/api/Setup",
+        contentType: "application/json; charset=utf-8"
+      }).then(response => (console.log(response)));
+    },
+
     getRefinedData: function() {
       axios({
         method: "post",
@@ -46,12 +54,25 @@ var motorcade = new Vue({
         contentType: "application/json; charset=utf-8",
         data: {
           make: this.make,
-          model: this.model,
           year: this.year
         }
-      }).then(response => (this.baseData = response.data));;
+      }).then(response => (this.baseData = response.data));
+
+      axios({
+        method: "post",
+        url: "http://localhost:65308/api/Refresh",
+        contentType: "application/json; charset=utf-8",
+        data: {
+          make: this.make,
+          year: this.year,
+          model: this.model
+        }
+      }).then(response => (this.carData = response.data));
     },
 
+    refreshCoverageData: function() {
+      
+    },
 
     submitForm: function () {
 
@@ -233,14 +254,9 @@ var motorcade = new Vue({
   },
 
   mounted() {
-
     axios
       .get("http://localhost:65308/api/VehicleDeduction")
       .then(response => (this.baseData = response.data));
-
-    axios
-      .get("http://localhost:65308/api/Motorcade")
-      .then(response => (this.carData = response.data));
       
     axios
       .get("http://localhost:65308/api/ToolType")

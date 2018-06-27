@@ -120,16 +120,24 @@
         </div>
         <div v-show="dataView">
             <h2>Database</h2>
-            <div class="searchDiv" class="form-group" @keyup="checkMatches()">
-                <input class="form-control" type="number" v-model="year" placeholder="Year">
-                <input class="form-control" type="text" v-model="make" placeholder="Make">
+            <div class="searchDiv" class="form-group" @change="refreshCoverageData">
+                <select v-model="year" type="number" id="vehicleYear" class="form-control mmy" @change="getRefinedData">
+                        <option value="" selected="selected">Year</option>
+                        <option v-for="year in baseData.years" v-bind:value="year">{{year}}</option>
+                </select>
+                <select v-model="make"  id="vehicleMake" class="form-control mmy" @change="getRefinedData">
+                    <option value="" selected="selected">Make</option>
+                    <option v-for="make in baseData.makes" v-bind:value="make">{{make}}</option>
+                 </select>
                 <input class="form-control" type="text" v-model="model" placeholder="Model">
                 <br>
                 <input class="form-control" type="text" v-model="manufacturerCode" placeholder="Manufacturer Code">
-                <input class="form-control" type="text" v-model="engineType" placeholder="Engine Type">
                 <div class="btn clear-search-btn" @click="clearForm">Clear
                     <span class="glyphicon glyphicon-trash"></span>
                 </div>
+                <div class="btn clear-search-btn" @click="refreshCoverageData">Force Refresh
+                        <span class="glyphicon glyphicon-search"></span>
+                    </div>
             </div>
             <table class="table">
                 <thead>
@@ -162,7 +170,7 @@
                             {{car.vehicleAttr.engineType}}
                         </td>
                         <td class="table-cell">
-                            {{car.vehicleAttr.toolType.name}}
+                            asTech
                         </td>
                         <td class="table-cell">
                             <div v-bind:class="{'full' : car.collisionCoverage.status===1,
